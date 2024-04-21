@@ -6,10 +6,33 @@
     box-sizing: inherit;
 }
 
+:root {
+    --color-dark-blue: #192a32;
+    --color-dark-blue-2: #1c303a;
+    --color-dark-blue-3: #1f3540;
+    --color-light-blue: #e8eaeb;
+    --color-green: #31c4be;
+    --color-green-light: #98e2df;
+    --color-orange: #f2b237;
+    --color-orange-light: #f9d99b;
+    --color-white: #fff;
+    --color-white-2: #f6f7f7;
+}
+
 html {
     font-size: 62.5%; /* 10PX */
 }
 
 body {
     box-sizing: border-box;
+    background-color: var(--color-dark-blue-3);
+    font-family: "Outfit", sans-serif;
+}
+
+.calculator {
+    background-color: transparent;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
