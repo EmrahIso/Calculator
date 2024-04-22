@@ -7,16 +7,40 @@
 }
 
 :root {
+    /**/
+    /* COLORS */
+    /**/
+
+    /*BLUE*/
     --color-dark-blue: #192a32;
     --color-dark-blue-2: #1c303a;
     --color-dark-blue-3: #1f3540;
+    --color-dark-blue-4: #132026;
     --color-light-blue: #e8eaeb;
+    --color-light-blue-2: #f0f1f2;
+    --color-light-blue-3: #a3aaad;
+
+    /*GREEN*/
+    --color-green-dark: #279d98;
     --color-green: #31c4be;
-    --color-green-light: #98e2df;
+    --color-green-light: #6fd6d2;
+
+    /*ORANGE*/
     --color-orange: #f2b237;
-    --color-orange-light: #f9d99b;
+    --color-orange-dark: #c28e2c;
+    --color-orange-light: #f6c973;
+
+    /*WHITE*/
     --color-white: #fff;
     --color-white-2: #f6f7f7;
+
+    /**/
+    /*BOX SHADOW*/
+    /**/
+
+    --shadow-mini: 0 1.5rem 3.5rem rgba(0, 0, 0, 0.03);
+    --shadow-light: 0 2rem 5rem rgba(0, 0, 0, 0.06);
+    --shadow-dark: 0 2rem 6rem rgba(0, 0, 0, 0.3);
 }
 
 html {
@@ -30,9 +54,13 @@ body {
 }
 
 .calculator {
+    width: 52rem;
     background-color: transparent;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
 }
