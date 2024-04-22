@@ -1,0 +1,103 @@
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5rem;
+    background-color: var(--color-dark-blue);
+    padding: 3rem;
+    border-radius: 14px;
+}
+
+button {
+    color: var(--color-dark-blue-2);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 3.6rem;
+    border: none;
+    outline: none;
+    padding: 1rem 2.5rem;
+    border-radius: 12px;
+    background-color: var(--color-light-blue-2);
+    cursor: pointer;
+    transition: all .1s;
+    box-shadow: 0 .5rem 0 var(--color-light-blue-3);
+}
+
+button:hover,
+.addBtn:focus,
+.subtractBtn:focus,
+.multiplyBtn:focus,
+.divideBtn:focus {
+    background-color: var(--color-white-2);
+}
+
+
+.operate {
+    grid-column: 3 / -1;
+    grid-row: 5 / 6;
+}
+
+.clear {
+    grid-column: 1 / 3;
+    grid-row: 5 / 6;
+}
+
+.delete {
+    grid-column: 4 / -1;
+    grid-row: 1 / 2;
+}
+
+.clear,
+.delete {
+    background-color: var(--color-orange);
+    color: var(--color-light-blue);
+    text-transform: uppercase;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    box-shadow: 0 .5rem 0 var(--color-orange-dark);
+}
+
+.clear:hover,
+.clear:focus,
+.delete:hover,
+.delete:focus {
+    background-color: var(--color-orange-light);
+    color: var(--color-white);
+}
+
+.operate {
+    background-color: var(--color-green);
+    box-shadow: 0 .5rem 0 var(--color-green-dark);
+}
+
+.operate:hover,
+.operate:focus {
+    background-color: var(--color-green-light);
+}
+
+.addBtn,
+.subtractBtn,
+.multiplyBtn {
+    grid-column: 4 / -1;
+}
+
+.addBtn {
+    grid-row: 2 / 3;
+}
+
+.subtractBtn {
+    grid-row: 3 / 4;
+}
+
+.multiplyBtn {
+    grid-row: 4 / 5;
+}
+
+.divideBtn {
+    grid-row: 4 / 5;
+    grid-column: 3 / 4;
+}
+
+.digit-0 {
+    grid-column: 2 / 3;
+    grid-row: 4 / 5;
+}
