@@ -16,9 +16,9 @@ function divide(numA, numB) {
 
 //////////////////////////////////////
 
-let numberA = 4;
-let numberB = 2;
-let operationOperator = '/';
+let numberA = 0;
+let numberB = 0;
+let operationOperator = '';
 
 //////////////////////////////////////
 
@@ -39,4 +39,35 @@ function operate(numA, numB, operator) {
     }
 }
 
-console.log(operate(numberA, numberB, operationOperator))
+//console.log(operate(numberA, numberB, operationOperator))
+
+//////////////////////////////////////////////////////////
+
+const displayEl = document.querySelector('.display');
+const keypadEl = document.querySelector('.keypad');
+
+let displayValue = Number(displayEl.innerText);
+
+function populateDisplay(str) {
+    if(displayEl.innerText.split('').length >= 13) {
+        return
+    }  else if(displayEl.innerText == '0') {
+        displayEl.innerText = str;
+    } else if(str === '.' && displayEl.innerText.split('').includes('.')) {
+        return
+    } else {
+        displayEl.innerText += str;
+    }
+    displayValue = Number(displayEl.innerText);
+}
+
+keypadEl.addEventListener('click', e => {
+    let eventTarget = e.target.className;
+    let eventTargetValue = e.target.innerText;
+    if(eventTarget !== "keypad" && eventTarget !== 'dotBtn') { 
+        populateDisplay(eventTargetValue);
+    } else if(eventTarget === "dotBtn") {
+        populateDisplay(eventTargetValue);
+    }
+})
+
