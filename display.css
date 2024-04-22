@@ -1,0 +1,10 @@
+.display {
+    background-color: var(--color-dark-blue-4);
+    color: var(--color-white);
+    font-size: 6rem;
+    font-weight: 600;
+    border-radius: 14px;
+    padding: 2.5rem 3.5rem;
+    text-align: end;
+    letter-spacing: 2px;
+}
