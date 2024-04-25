@@ -27,7 +27,7 @@ button:hover,
 .subtractBtn:focus,
 .multiplyBtn:focus,
 .divideBtn:focus {
-    background-color: var(--color-white-2);
+    background-color: var(--color-white);
 }
 
 
