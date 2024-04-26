@@ -5,19 +5,19 @@ const myRe = /d(b+)d/g;
 // MAIN OPERATIONS
 
 function add(numA, numB) {
-    return numA + numB;
+    return numB + numA;
 }
 
 function subtract(numA, numB) {
-    return numA - numB;
+    return numB - numA;
 }
 
 function multiply(numA, numB) {
-    return numA * numB;
+    return numB * numA;
 }
 
 function divide(numA, numB) {
-    return numA / numB;
+    return numB / numA;
 }
 
 //////////////////////////////////////
@@ -139,19 +139,17 @@ function operationStart(targetValue) {
 
         let sumOfOperators = operatorArr.reduce((sum, currentItem) =>  sum + currentItem.value, 0);
         if(sumOfOperators == 1) {
-            numberA = Number(displayEl.innerText);
-            console.log(numberA);
+            numberB = Number(displayEl.innerText);
         } else if(lastClickedKey == 'DEL') {
             let result = operate(numberA, numberB, operationOperator);
             displayEl.innerText = result;
         } else {
-            numberB = Number(displayEl.innerText);
-            console.log(numberB);
+            numberA = Number(displayEl.innerText);
             let result = operate(numberA, numberB, operationOperator);
             displayEl.innerText = result;
-            numberA = Number(displayEl.innerText);
-            
+            numberB = Number(displayEl.innerText);
         }
+        numberB = Number(displayEl.innerText);
 
         switch(targetValue) {
             case '+':
@@ -180,7 +178,7 @@ function deleteFunction() {
         numberA = 0;
         numberB = 0;
         displayEl.innerText = '0';
-    } else if(sumOfOperators > 0) {
+    } else if(sumOfOperators == 1) {
         if(newValue[1] == '.') {
             displayEl.innerText = '0';
             numberB = 0;
@@ -191,7 +189,23 @@ function deleteFunction() {
               displayEl.innerText = '0';
             }
             numberA = Number(displayEl.innerText);
+        }
+    } else if(sumOfOperators > 1) {
+        if(newValue[1] == '.') {
+            displayEl.innerText = '0';
             numberB = 0;
+        } else {
+            if(lastClickedKey == '+' || lastClickedKey == '-' || lastClickedKey == 'x' || lastClickedKey == '/') {
+                numberA = Number(displayEl.innerText);
+            } else {
+                numberA = numberB;
+            }
+            newValue.pop();
+            displayEl.innerText = newValue.join('');
+            if(displayEl.innerText == '') {
+              displayEl.innerText = '0';
+            }
+            numberB = Number(displayEl.innerText);    
         }
     } else {
         if(newValue[1] == '.') {
@@ -206,6 +220,15 @@ function deleteFunction() {
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+// CLEAR FUNCTION
+
+function clearFunction() {
+    displayEl.innerText = '0';
+    numberA = 0;
+    numberB = 0;
+    operatorArr.forEach(item => item.value = 0);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // EVENT LISTENERS
@@ -213,12 +236,10 @@ function deleteFunction() {
 keypadEl.addEventListener('click', e => {
     let eventTargetClass = e.target.className;
     let eventTargetValue = e.target.innerText;
-    if(eventTargetClass === 'operate') {
-        console.log('operate');
-    } else if(eventTargetClass === 'clear') {
-        console.log('clear');
+    if(eventTargetClass === 'clear') {
+        clearFunction();
     } else if(eventTargetClass === 'delete') {
-        deleteFunction()
+        deleteFunction();
     } else if(eventTargetClass === 'keypad') {} else if(eventTargetClass.includes('digit') || eventTargetClass.includes('dot')) {
         populateDisplay(eventTargetValue);
     } else {
