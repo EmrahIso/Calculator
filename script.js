@@ -2,51 +2,11 @@
 const myRe = /d(b+)d/g;
 
 //////////////////////////////////////
-// MAIN OPERATIONS
-
-function add(numA, numB) {
-    return numB + numA;
-}
-
-function subtract(numA, numB) {
-    return numB - numA;
-}
-
-function multiply(numA, numB) {
-    return numB * numA;
-}
-
-function divide(numA, numB) {
-    return numB / numA;
-}
-
-//////////////////////////////////////
 // THREE MAIN VARIABLES
 
 let numberA = 0;
 let numberB = 0;
 let operationOperator = '';
-
-//////////////////////////////////////
-// OPERATE FUNCTION
-
-function operate(numA, numB, operator) {
-    switch(operator) {
-        case '+':
-            return add(numA, numB)
-        break;
-        case '-':
-            return subtract(numA, numB)
-        break;
-        case '*':
-            return multiply(numA, numB)
-        break;
-        case '/':
-            return divide(numA, numB)
-        break;
-    }
-}
-
 
 //////////////////////////////////////////////////////////
 // OPERATORS ARR  (counts how many times the operators clicked)
@@ -65,6 +25,45 @@ let operatorArr = [
     {value: 0}
 ];
 
+//////////////////////////////////////
+// MAIN OPERATIONS
+
+function add(numA, numB) {
+        return numA + numB;
+}
+
+function subtract(numA, numB) {
+        return numA - numB;
+}
+
+function multiply(numA, numB) {
+        return numA * numB;   
+}
+
+function divide(numA, numB) {
+        return numA / numB;
+}
+
+//////////////////////////////////////
+// OPERATE FUNCTION
+
+function operate(numA, numB, operator) {
+    switch(operator) {
+        case '+':
+            return add(numB, numA)
+        break;
+        case '-':
+            return subtract(numB, numA)
+        break;
+        case '*':
+            return multiply(numB, numA)
+        break;
+        case '/':
+            return divide(numB, numA)
+        break;
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // POPULATE FUNCTION
@@ -74,6 +73,9 @@ const keypadEl = document.querySelector('.keypad');
 
 let lastClickedKey = null;
 function populateDisplay(str) {
+    if(displayEl.innerText == 'WHY 0?') {
+        displayEl.innerText = 0;
+    }
     if(displayEl.innerText.split('').length >= 11) {
         return
     } else if (str == '.'  && (lastClickedKey == '.' || lastClickedKey == '+' || lastClickedKey == '-' || lastClickedKey == 'x' || lastClickedKey == '/')) {
@@ -104,7 +106,14 @@ function populateDisplay(str) {
 // OPERATION FUNCTION
 
 function operationStart(targetValue) {
-    if(displayEl.innerText === '0' || displayEl.innerText.split('').length <= 0) {} else {
+    let oldSumOfOperators = operatorArr.reduce((sum, currentItem) =>  sum + currentItem.value, 0);
+    let stupid = false; // We use this variable to display a message when the user tries to divide or multiply by 0 
+    if(displayEl.innerText.split('').length <= 0) {
+        stupid = false;
+    } else if(targetValue == '=' && oldSumOfOperators == 0) {
+        numberB = Number(displayEl.innerText);
+    } else {
+        stupid = false;
         if(lastClickedKey == '+' || lastClickedKey == '-' || lastClickedKey == 'x' || lastClickedKey == '/') {
             switch(targetValue) {
                 case '+':
@@ -137,8 +146,34 @@ function operationStart(targetValue) {
             break;
         }
 
+        if(oldSumOfOperators >= 0 && displayEl.innerText === '0' && (operationOperator == '/' || operationOperator == '*')) {
+            stupid = true;
+        }
+
         let sumOfOperators = operatorArr.reduce((sum, currentItem) =>  sum + currentItem.value, 0);
-        if(sumOfOperators == 1) {
+
+        if(lastClickedKey == '=') {} else if(sumOfOperators == 1 && targetValue == '=') {
+            numberA = Number(displayEl.innerText);
+            let result = operate(numberA, numberB, operationOperator);
+            if(result == 'WHY 0?') {
+                displayEl.innerText = result;
+            } else {
+                displayEl.innerText = result;
+                numberB = Number(displayEl.innerText);
+            }
+        } else if(sumOfOperators > 1 && targetValue == '=') {
+            numberA = Number(displayEl.innerText);
+            let result = operate(numberA, numberB, operationOperator);
+            if(result == 'WHY 0?') {
+                displayEl.innerText = result;
+            } else {
+                displayEl.innerText = result;
+                numberB = Number(displayEl.innerText);
+            }
+            numberA = Number(displayEl.innerText);
+            numberB = 0;
+            operatorArr.forEach(item => item = 0);
+        } else if(sumOfOperators == 1) {
             numberB = Number(displayEl.innerText);
         } else if(lastClickedKey == 'DEL') {
             let result = operate(numberA, numberB, operationOperator);
@@ -146,8 +181,12 @@ function operationStart(targetValue) {
         } else {
             numberA = Number(displayEl.innerText);
             let result = operate(numberA, numberB, operationOperator);
-            displayEl.innerText = result;
-            numberB = Number(displayEl.innerText);
+            if(result == 'WHY 0?') {
+                displayEl.innerText = result;
+            } else {
+                displayEl.innerText = result;
+                numberB = Number(displayEl.innerText);
+            }
         }
         numberB = Number(displayEl.innerText);
 
@@ -166,6 +205,12 @@ function operationStart(targetValue) {
             break;
         }
     }
+    if(stupid) {
+        displayEl.innerText = 'WHY 0?';
+        numberA = 0;
+        numberB = 0;
+        operatorArr.forEach(item => item.value = 0);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -174,14 +219,27 @@ function operationStart(targetValue) {
 function deleteFunction() {
     let newValue = displayEl.innerText.split('');
     let sumOfOperators = operatorArr.reduce((sum, currentItem) =>  sum + currentItem.value, 0);
-    if(newValue.includes('.')) {
+    console.log(sumOfOperators);
+    if(displayEl.innerText == 'WHY 0?') {
         numberA = 0;
         numberB = 0;
         displayEl.innerText = '0';
-    } else if(sumOfOperators == 1) {
+    } else if(newValue.includes('.')) {
+        numberA = 0;
+        numberB = 0;
+        displayEl.innerText = '0';
+    } else if(sumOfOperators == 0 && lastClickedKey == '=') {} else if(sumOfOperators == 1) {
         if(newValue[1] == '.') {
             displayEl.innerText = '0';
             numberB = 0;
+        } else if(lastClickedKey == '=') {
+            numberA = 0;
+            newValue.pop();
+            displayEl.innerText = newValue.join('');
+            if(displayEl.innerText == '') {
+              displayEl.innerText = '0';
+            }
+            numberB = Number(displayEl.innerText); 
         } else {
             newValue.pop();
             displayEl.innerText = newValue.join('');
@@ -195,17 +253,17 @@ function deleteFunction() {
             displayEl.innerText = '0';
             numberB = 0;
         } else {
-            if(lastClickedKey == '+' || lastClickedKey == '-' || lastClickedKey == 'x' || lastClickedKey == '/') {
-                numberA = Number(displayEl.innerText);
-            } else {
-                numberA = numberB;
+            if(lastClickedKey == '=') {
+                numberB = 0;
+            } else if(lastClickedKey == '+' || lastClickedKey == '-' || lastClickedKey == 'x' || lastClickedKey == '/') {
+                numberB = 0;
             }
             newValue.pop();
             displayEl.innerText = newValue.join('');
             if(displayEl.innerText == '') {
               displayEl.innerText = '0';
             }
-            numberB = Number(displayEl.innerText);    
+            numberA = Number(displayEl.innerText);  
         }
     } else {
         if(newValue[1] == '.') {
@@ -218,6 +276,8 @@ function deleteFunction() {
             }
         }
     }
+    console.log('a', numberA)
+    console.log('b', numberB)  
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,3 +312,7 @@ keypadEl.addEventListener('click', e => {
     lastClickedKey = eventTargetValue;
 })
 ////////////////////////////////////////////////////////////////
+
+/*
+Vecina toga je gotovo samo napravi da jednako odnosno operate operator radi i kada je suma operatora 0 i 1
+*/
