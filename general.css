@@ -54,7 +54,7 @@ body {
 }
 
 .calculator {
-    width: 52rem;
+    max-width: 52rem;
     background-color: transparent;
     position: absolute;
     left: 50%;

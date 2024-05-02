@@ -1,0 +1,15 @@
+@media only screen and (max-width: 43.75em) {
+    html {
+        font-size: 50%; /*8PX*/
+    }
+}
+
+@media only screen and (max-width: 26.25em) {
+    html {
+        font-size: 43.75%; /*7PX*/
+    }
+
+    .calculator {
+        max-width: 45rem;
+    }
+}
