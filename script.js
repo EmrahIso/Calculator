@@ -29,19 +29,19 @@ let operatorArr = [
 // MAIN OPERATIONS
 
 function add(numA, numB) {
-        return numA + numB;
+    return numA + numB;
 }
 
 function subtract(numA, numB) {
-        return numA - numB;
+    return numA - numB;
 }
 
 function multiply(numA, numB) {
-        return numA * numB;   
+    return numA * numB;   
 }
 
 function divide(numA, numB) {
-        return numA / numB;
+    return numA / numB;
 }
 
 //////////////////////////////////////
@@ -115,8 +115,6 @@ function populateDisplay(str) {
 // OPERATION FUNCTION
 
 function operationStart(targetValue) {
-    //console.log('target', targetValue);
-    //console.log('last', lastClickedKey);
     let oldSumOfOperators = operatorArr.reduce((sum, currentItem) =>  sum + currentItem.value, 0);
     let stupid = false; // We use this variable to display a message when the user tries to divide or multiply by 0 
     if(displayEl.innerText == 'WHY 0?') {
@@ -167,13 +165,8 @@ function operationStart(targetValue) {
         let sumOfOperators = operatorArr.reduce((sum, currentItem) =>  sum + currentItem.value, 0);
 
         if(lastClickedKey == '=') {} else if(sumOfOperators == 1 && targetValue == '=') {
-            //console.log('a', numberA);
-            //console.log('b', numberB);
             numberA = Number(displayEl.innerText);
-            //console.log('a', numberA)
-            //console.log('b', numberB)
             let result = operate(numberA, numberB, operationOperator);
-           // console.log('r', result);
             numberA = 0;
             if(result == 'WHY 0?') {
                 displayEl.innerText = result;
@@ -193,8 +186,6 @@ function operationStart(targetValue) {
             numberA = 0;
             numberB = Number(displayEl.innerText);
             operatorArr.forEach(item => item = 0);
-            console.log('a', numberA);
-            console.log('b', numberB);
         } else if(sumOfOperators == 1) {
             numberB = Number(displayEl.innerText);
         } else if(lastClickedKey == 'DEL') {
@@ -261,6 +252,7 @@ function deleteFunction() {
         numberA = 0;
         numberB = 0;
         displayEl.innerText = '0';
+        operatorArr.forEach(item => item.value = 0);
     } else if(sumOfOperators == 0 && lastClickedKey == '=') {} else if(sumOfOperators == 1) {
         if(newValue[1] == '.') {
             displayEl.innerText = '0';
@@ -350,9 +342,9 @@ function clearFunction() {
 // EVENT LISTENERS
 
 keypadEl.addEventListener('click', e => {
-    console.log('click');
     let eventTargetClass = e.target.className;
     let eventTargetValue = e.target.innerText;
+
     if(eventTargetClass === 'clear') {
         clearFunction();
         lastClickedKey = eventTargetValue;
@@ -380,13 +372,12 @@ keypadEl.addEventListener('click', e => {
 })
 
 ////////////////////////////////////////////////////////////////
-
-// Finalni zadatak: dodaj keyboard support
+// KEYBOARD SUPPORT
 
 window.addEventListener('keydown', e => {
-    console.log('press');
     let eventTargetKeyCode = e.keyCode;
     let eventTargetKeyValue = e.key;
+
     if(eventTargetKeyCode === 13) {
         eventTargetKeyCode = 187;
         eventTargetKeyValue = '=';
@@ -410,6 +401,14 @@ window.addEventListener('keydown', e => {
     } else if(eventTargetKeyCode === 187) {
         operationStart(eventTargetKeyValue);
         lastClickedKey = eventTargetKeyValue;
+    } else if(  eventTargetKeyCode === 107 ||
+                eventTargetKeyCode === 109 ||
+                eventTargetKeyCode === 111) {
+                    operationStart(eventTargetKeyValue);
+                    lastClickedKey = eventTargetKeyValue;
+    }  else if(eventTargetKeyCode === 106) {
+            operationStart('x');
+            lastClickedKey = 'x';
     }
 
     if(displayEl.innerText.length >= 11) {
@@ -417,6 +416,3 @@ window.addEventListener('keydown', e => {
         displayEl.innerText = result;
     }
 });
-
-
-// Desava se promjena predznaka u kombinaciji DEL i jednako buttona na tastaturi i dugmeta na ekranu
