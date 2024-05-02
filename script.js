@@ -359,7 +359,13 @@ keypadEl.addEventListener('click', e => {
     } else if(eventTargetClass === 'delete') {
         deleteFunction();
         lastClickedKey = eventTargetValue;
-    } else if(eventTargetClass === 'keypad') {} else if(lastClickedKey == '=' && (eventTargetClass.includes('digit') || eventTargetClass.includes('dot'))) {} else if(eventTargetClass.includes('digit') || eventTargetClass.includes('dot')) {
+    } else if(eventTargetClass === 'keypad') {} else if(lastClickedKey == '=' && (eventTargetClass.includes('digit') || eventTargetClass.includes('dot')) && displayEl.innerText == 'WHY 0?') {
+        populateDisplay(eventTargetValue);
+        operationStart('+');
+        numberA = 0;
+        numberB = 0;
+        lastClickedKey = eventTargetValue;
+    } else if(lastClickedKey == '=' && (eventTargetClass.includes('digit') || eventTargetClass.includes('dot'))) {} else if(eventTargetClass.includes('digit') || eventTargetClass.includes('dot')) {
         populateDisplay(eventTargetValue);
         lastClickedKey = eventTargetValue;
     } else {
@@ -370,6 +376,7 @@ keypadEl.addEventListener('click', e => {
         let result = displayEl.innerText.split('').toSpliced(10).join('');
         displayEl.innerText = result;
     }
+    e.target.blur();
 })
 
 ////////////////////////////////////////////////////////////////
@@ -384,7 +391,6 @@ window.addEventListener('keydown', e => {
         eventTargetKeyCode = 187;
         eventTargetKeyValue = '=';
     }
-
     if(eventTargetKeyCode === 8) {
         deleteFunction();
         lastClickedKey = 'DEL';
@@ -411,3 +417,6 @@ window.addEventListener('keydown', e => {
         displayEl.innerText = result;
     }
 });
+
+
+// Desava se promjena predznaka u kombinaciji DEL i jednako buttona na tastaturi i dugmeta na ekranu
