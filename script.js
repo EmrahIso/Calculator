@@ -68,7 +68,8 @@ function operate(numA, numB, operator) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // POPULATE FUNCTION
 
-const displayEl = document.querySelector('.display');
+const displayEl = document.querySelector('.display-inner');
+const displayOperationInfoEl = document.querySelector('.display-operation-info');
 const keypadEl = document.querySelector('.keypad');
 
 let lastClickedKey = null;
@@ -115,18 +116,34 @@ function populateDisplay(str) {
 // OPERATION FUNCTION
 
 function operationStart(targetValue) {
+    console.log('pokrenuto')
     let oldSumOfOperators = operatorArr.reduce((sum, currentItem) =>  sum + currentItem.value, 0);
     let stupid = false; // We use this variable to display a message when the user tries to divide or multiply by 0 
     if(displayEl.innerText == 'WHY 0?') {
         numberA = 0;
         numberB = 0;
         displayEl.innerText = '0';
+        displayOperationInfoEl.innerHTML = '&nbsp';
     }
     if(displayEl.innerText.split('').length <= 0) {
         stupid = false;
     } else if(lastClickedKey == '=' && targetValue == '=') {} else if(targetValue == '=' && oldSumOfOperators == 0) {} else {
         stupid = false;
         if(lastClickedKey == '+' || lastClickedKey == '-' || lastClickedKey == 'x' || lastClickedKey == '/') {
+            //We use this block of code to show operationOperator to users when lastClickedKEy is one of operators
+            if(targetValue != '=') {
+                let oldOperationInfoValueArr = displayOperationInfoEl.innerText.split('');
+                let lastClickedKeyIndex = oldOperationInfoValueArr.indexOf(lastClickedKey);
+                let newOperationInfoValueArr = oldOperationInfoValueArr.splice(0, lastClickedKeyIndex);
+                newOperationInfoValueArr.push(targetValue);
+                displayOperationInfoEl.innerText = newOperationInfoValueArr.join('');
+            } else {
+                let oldOperationInfoValueArr = displayOperationInfoEl.innerText.split('');
+                let lastClickedKeyIndex = oldOperationInfoValueArr.indexOf(lastClickedKey);
+                let newOperationInfoValueArr = oldOperationInfoValueArr.splice(0, lastClickedKeyIndex);
+                displayOperationInfoEl.innerText = newOperationInfoValueArr.join('');
+            }
+            //
             switch(targetValue) {
                 case '+':
                     operationOperator = '+';
@@ -174,6 +191,7 @@ function operationStart(targetValue) {
                 displayEl.innerText = result;
                 numberB = Number(displayEl.innerText);
             }
+            displayOperationInfoEl.innerText = `${numberB}`;
         } else if(sumOfOperators > 1 && targetValue == '=') {
             numberA = Number(displayEl.innerText);
             let result = operate(numberA, numberB, operationOperator);
@@ -185,12 +203,15 @@ function operationStart(targetValue) {
             }
             numberA = 0;
             numberB = Number(displayEl.innerText);
+            displayOperationInfoEl.innerText = `${numberB}`;
             operatorArr.forEach(item => item = 0);
         } else if(sumOfOperators == 1) {
             numberB = Number(displayEl.innerText);
+            displayOperationInfoEl.innerText = `${numberB}`;
         } else if(lastClickedKey == 'DEL') {
             let result = operate(numberA, numberB, operationOperator);
             displayEl.innerText = result;
+            displayOperationInfoEl.innerText = `${result}`;
         } else {
             numberA = Number(displayEl.innerText);
             let result = operate(numberA, numberB, operationOperator);
@@ -200,8 +221,12 @@ function operationStart(targetValue) {
                 displayEl.innerText = result;
                 numberB = Number(displayEl.innerText);
             }
+            displayOperationInfoEl.innerText = `${numberB}`;
         }
         numberB = Number(displayEl.innerText);
+        if(targetValue != '=') {
+            displayOperationInfoEl.innerText += `${targetValue}`;
+        }
 
         switch(targetValue) {
             case '+':
@@ -226,6 +251,7 @@ function operationStart(targetValue) {
     }
     if(stupid) {
         displayEl.innerText = 'WHY 0?';
+        displayOperationInfoEl.innerHTML = '&nbsp';
         numberA = 0;
         numberB = 0;
         operatorArr.forEach(item => item.value = 0);
@@ -234,6 +260,7 @@ function operationStart(targetValue) {
         let indexOfDot = oldValue.indexOf('.');
         let newValue = oldValue.splice(0, indexOfDot + 3);
         displayEl.innerText = newValue.join('');
+        displayOperationInfoEl.innerText = newValue.join('');
         return
     }
 }
@@ -252,6 +279,7 @@ function deleteFunction() {
         numberA = 0;
         numberB = 0;
         displayEl.innerText = '0';
+        displayOperationInfoEl.innerHTML = '&nbsp';
         operatorArr.forEach(item => item.value = 0);
     } else if(sumOfOperators == 0 && lastClickedKey == '=') {} else if(sumOfOperators == 1) {
         if(newValue[1] == '.') {
@@ -333,6 +361,7 @@ function deleteFunction() {
 
 function clearFunction() {
     displayEl.innerText = '0';
+    displayOperationInfoEl.innerHTML = '&nbsp'; 
     numberA = 0;
     numberB = 0;
     operatorArr.forEach(item => item.value = 0);
@@ -354,6 +383,7 @@ keypadEl.addEventListener('click', e => {
     } else if(eventTargetClass === 'keypad') {} else if(lastClickedKey == '=' && (eventTargetClass.includes('digit') || eventTargetClass.includes('dot')) && displayEl.innerText == 'WHY 0?') {
         populateDisplay(eventTargetValue);
         operationStart('+');
+        displayOperationInfoEl.innerHTML = "&nbsp";
         numberA = 0;
         numberB = 0;
         lastClickedKey = eventTargetValue;

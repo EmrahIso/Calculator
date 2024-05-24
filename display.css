@@ -8,3 +8,9 @@
     text-align: end;
     letter-spacing: 2px;
 }
+
+.display-operation-info {
+    font-size: 1.8rem;
+    color: var(--color-light-blue-3);
+    display: block;
+}

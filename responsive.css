@@ -2,6 +2,10 @@
     html {
         font-size: 50%; /*8PX*/
     }
+
+    .developer {
+        font-size: 1.8rem;
+    }
 }
 
 @media only screen and (max-width: 26.25em) {
@@ -11,5 +15,9 @@
 
     .calculator {
         max-width: 45rem;
+    }
+
+    .developer {
+        font-size: 2rem;
     }
 }
